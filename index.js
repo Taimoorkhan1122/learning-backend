@@ -14,6 +14,7 @@ const logger = (req, res, next) => {
     console.log("Not found!");
     res.status(404).json({ message: "Request not found!" });
   }
+  // res.name = "Taimoor";
   next();
 };
 
@@ -29,21 +30,26 @@ app.get("/", (req, res) => {
   res.status(200).send("hello from express");
 });
 
-app.get("/user1", (req, res) => {
+app.get("/user1", Auth, (req, res) => {
   res.status(200).json(response[0]);
 });
 
-app.get("/user2", (req, res) => {
+app.get("/user2", Auth, (req, res) => {
   res.status(200).json(response[1]);
 });
+
+function Auth(req, res, next) {
+  console.log("Auth middleware triggered");
+  res.name ? next() : res.status(400).send("You must login first!");
+}
 
 // We can use middleware to handle unmatched routes
 app.use((req, res) => {
   console.log(
-    "Got request for ",
+    "Got request Method: ",
     req.method,
-    req.url,
-    " Responding with 400 NOT FOUND"
+    " For: " + req.url,
+    " \nResponding with 400 NOT FOUND"
   );
   res.status(400).send("Request not found!");
 });
