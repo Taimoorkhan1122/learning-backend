@@ -10,7 +10,10 @@ console.clear();
 app.use(express.json({ extended: false }));
 
 const logger = (req, res, next) => {
-  console.log("logger");
+  if (req.method !== "GET") {
+    console.log("Not found!");
+    res.status(404).json({ message: "Request not found!" });
+  }
   next();
 };
 
@@ -18,8 +21,8 @@ app.use(logger);
 
 // Dummy Data
 const response = [
-  { id: 1, data: { name: "express", port: PORT } },
-  { id: 2, data: { name: "express", port: PORT } },
+  { id: 1, data: { name: "Response no 01", port: PORT } },
+  { id: 2, data: { name: "Respnose no 02", port: PORT } },
 ];
 
 app.get("/", (req, res) => {
@@ -34,15 +37,16 @@ app.get("/user2", (req, res) => {
   res.status(200).json(response[1]);
 });
 
-// app.use((req, res) => {
-//   console.log(
-//     "Got request for ",
-//     req.method,
-//     req.url,
-//     " Responding with 400 NOT FOUND"
-//   );
-//   res.status(400).send("Not a valid request");
-// });
+// We can use middleware to handle unmatched routes
+app.use((req, res) => {
+  console.log(
+    "Got request for ",
+    req.method,
+    req.url,
+    " Responding with 400 NOT FOUND"
+  );
+  res.status(400).send("Request not found!");
+});
 
 app.listen(PORT, () => {
   console.log(`Express running on port:${PORT}`);
