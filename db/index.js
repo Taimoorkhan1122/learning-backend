@@ -5,7 +5,7 @@ const uri = "mongodb://127.0.0.1:27017";
 // instantiating new mongo client
 const client = new MongoClient(uri, { useUnifiedTopology: true });
 
-const run = async () => {
+const run = async (querryParam, findData) => {
   try {
     await client.connect();
     const database = client.db("myTestDB");
@@ -13,15 +13,25 @@ const run = async () => {
 
     // Querry for dummy data
     const querry = { title: "Interstellar", title: "Pirates of Caribean" };
-    collection.insertMany([
-      { title: "Interstellar", cast: ["actor 1", "actor 2", "actor 3"] },
-      {
-        title: "Pirates of Caribbean",
-        cast: ["actor 1", "actor 2", "actor 3", "actor 4", "actor 5"],
-      },
-    ]);
-    const movie = await collection.findOne({ title: "Interstellar" });
-    console.log(movie);
+
+    /*    
+        db.collection.insertMany(
+       [ <document 1> , <document 2>, ... ],
+       {
+          writeConcern: <document>,
+          ordered: <boolean>
+       }
+    )
+  */
+    if (querryParam) {
+      const result = await collection.insertOne(querryParam);
+      console.dir(result.insertedCount);
+    }
+
+    // find() returns reference to a Cursor with which you can navigate matched documents
+    const movie = collection.find(findData).sort({ length: -1 });
+    // await movie.forEach((item) => console.log(item));
+    await movie.forEach(console.dir);
 
     // success message
     console.log("DB connection successful");

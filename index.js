@@ -1,13 +1,27 @@
+// importing modules
 const express = require("express");
 
+// importing internal modules
 const rundb = require("./db");
-rundb().catch(console.dir);
 
 const app = express();
-
 const PORT = 3500;
 
-// console.clear();
+console.clear();
+
+// Querry database or Insert data
+// inset data accepst an functions
+const insertData = {
+  _id: 5,
+  title: "Wonder Woman",
+  cast: ["actor 1", "actor 2", "actor 3"],
+};
+
+const findData = {
+  _id: 5,
+};
+
+rundb(undefined, findData).catch(console.dir);
 
 // when data we get data so it will be parsed into json rather than ugly raw data
 app.use(express.json({ extended: false }));
