@@ -1,10 +1,13 @@
 const express = require("express");
 
+const rundb = require("./db");
+rundb().catch(console.dir);
+
 const app = express();
 
 const PORT = 3500;
 
-console.clear();
+// console.clear();
 
 // when data we get data so it will be parsed into json rather than ugly raw data
 app.use(express.json({ extended: false }));
