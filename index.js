@@ -3,14 +3,14 @@ const express = require("express");
 
 // importing internal modules
 const rundb = require("./db");
+const router = require("./Routes");
 
 const app = express();
 const PORT = 3500;
-
 console.clear();
 
-// Querry database or Insert data
-// inset data accepst an functions
+// ========= Querry database or Insert data =========
+//    inset data accepst an functions
 const insertData = {
   _id: 5,
   title: "Wonder Woman",
@@ -20,21 +20,20 @@ const insertData = {
 const findData = {
   _id: 5,
 };
+// rundb(undefined, findData).catch(console.dir);
 
-rundb(undefined, findData).catch(console.dir);
-
-// when data we get data so it will be parsed into json rather than ugly raw data
+// when  we get data, it will be parsed into json rather than ugly raw data
 app.use(express.json({ extended: false }));
 
+// logger middleware
 const logger = (req, res, next) => {
   if (req.method !== "GET") {
     console.log("Not found!");
     res.status(404).json({ message: "Request not found!" });
   }
-  // res.name = "Taimoor";
+  res.name = "Taimoor";
   next();
 };
-
 app.use(logger);
 
 // Dummy Data
@@ -43,22 +42,19 @@ const response = [
   { id: 2, data: { name: "Respnose no 02", port: PORT } },
 ];
 
+// ========= Application Routes =========
 app.get("/", (req, res) => {
-  res.status(200).send("hello from express");
+  res.status(200).send("hello from express server");
 });
 
-app.get("/user1", Auth, (req, res) => {
-  res.status(200).json(response[0]);
-});
-
-app.get("/user2", Auth, (req, res) => {
-  res.status(200).json(response[1]);
-});
-
+// Auth middleware
 function Auth(req, res, next) {
   console.log("Auth middleware triggered");
   res.name ? next() : res.status(400).send("You must login first!");
 }
+
+// handling applications routes
+app.use("/api/v1", Auth, router);
 
 // We can use middleware to handle unmatched routes
 app.use((req, res) => {
@@ -71,6 +67,7 @@ app.use((req, res) => {
   res.status(400).send("Request not found!");
 });
 
+// ========= Starting server =========
 app.listen(PORT, () => {
   console.log(`Express running on port:${PORT}`);
 });
