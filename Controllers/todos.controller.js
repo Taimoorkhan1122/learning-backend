@@ -11,7 +11,7 @@ exports.todosController = (req, res) => {
   res.send(todos);
 };
 
-exports.getTodosController = (req, res) => {
+exports.getTodosByID = (req, res) => {
   const id = req.params.id;
   const foundTodos = todos.filter((todo) => todo.id === +id);
   console.log(foundTodos);
