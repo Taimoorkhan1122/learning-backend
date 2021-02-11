@@ -1,13 +1,16 @@
 // importing modules
 const express = require("express");
+const { ConnectionBase } = require("mongoose");
 
 // importing internal modules
-const rundb = require("./db");
+const { connectDatabase } = require("./db");
 const router = require("./Routes");
 
 const app = express();
 const PORT = 3500;
 console.clear();
+
+connectDatabase();
 
 // ========= Querry database or Insert data =========
 //    inset data accepst an functions
