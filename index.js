@@ -1,13 +1,14 @@
 // importing modules
 const express = require("express");
 const { ConnectionBase } = require("mongoose");
+require("dotenv").config({ path: "./.env" });
 
 // importing internal modules
 const { connectDatabase } = require("./db");
 const router = require("./Routes");
 
 const app = express();
-const PORT = 3500;
+const PORT = process.env.PORT || 3500;
 console.clear();
 
 connectDatabase();

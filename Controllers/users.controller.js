@@ -2,8 +2,9 @@ const bcrypt = require("bcrypt");
 
 const { UserModel } = require("../models");
 
-exports.getUsersController = (req, res) => {
-  res.send("getting all users");
+exports.getUsersController = async (req, res) => {
+  const user = await UserModel.find({}, { password: 0 });
+  res.status(200).send({ success: true, Message: "getting all users: ", user });
 };
 
 // singup user

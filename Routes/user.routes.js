@@ -4,21 +4,16 @@ const { getUsers } = require("../Controllers");
 const app = express();
 const router = express.Router();
 
-// /users route
+// =====  GET Route =====
 router.get("/", getUsers.getUsersController);
 
-const auth = (req, res, next) => {
-  console.log("running post");
-  next();
-};
-// route for singup
-router.post("/signup", auth, getUsers.userSignUp);
+router.get("/user", getUsers.getUsersController);
 
-router.post("/", auth, (req, res) => {
+// ===== POST Routes =====
+router.post("/signup", getUsers.userSignUp);
+
+router.post("/", (req, res) => {
   res.status(404).send("request not found again");
 });
-
-// /users/id route
-// router.get("/:id", getUsers.getUsersByID);
 
 exports.userRoute = app.use("/users", router);
