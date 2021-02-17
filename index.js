@@ -5,7 +5,7 @@ const chalk = require("chalk");
 require("dotenv").config({ path: "./.env" });
 
 // importing internal modules
-const { Auth } = require("./Middlewares");
+
 const router = require("./Routes");
 const { connectDatabase } = require("./db");
 
@@ -26,7 +26,7 @@ app.use(express.json({ extended: false }));
 
 // ========= Application Routes =========
 
-app.use("/api/v1", Auth, router);
+app.use("/api/v1", router);
 
 // This middleware will handle unmatched routes
 app.use((req, res) => {

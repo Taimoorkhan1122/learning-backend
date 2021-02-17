@@ -15,10 +15,9 @@ module.exports = app.use(async (req, res, next) => {
   const { username, password } = req.body;
 
   try {
-    const user = await UserModel.find({ username, password });
-
-    const foundKey = Object.keys(user);
-    const userKey = ["username", "password"];
+    const [user] = await UserModel.find({ username }, { password: 0 });
+    const foundKey = Object.keys(user.toObject());
+    const userKey = ["username"];
     const isRegistered = userKey.every((key) => foundKey.includes(key));
     // check if request is from regestered user or not
     if (!isRegistered) {
