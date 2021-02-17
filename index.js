@@ -5,11 +5,18 @@ const chalk = require("chalk");
 require("dotenv").config({ path: "./.env" });
 
 // importing internal modules
-const { connectDatabase } = require("./db");
+const { Auth } = require("./Middlewares");
 const router = require("./Routes");
+const { connectDatabase } = require("./db");
 
 const app = express();
 const PORT = process.env.PORT || 3500;
+
+// ===== Utilities =====
+const setError = chalk.red.bold;
+const setMessage = chalk.blue.bold;
+const setStatus = chalk.green.bold;
+
 console.clear();
 
 connectDatabase();
@@ -18,20 +25,16 @@ connectDatabase();
 app.use(express.json({ extended: false }));
 
 // ========= Application Routes =========
-app.get("/", (req, res) => {
-  res.status(200).send("hello from express server");
-});
 
-// handling applications routes
-app.use("/api/v1", router);
+app.use("/api/v1", Auth, router);
 
 // This middleware will handle unmatched routes
 app.use((req, res) => {
   console.log(
     "Got request Method: ",
-    chalk.red.bold(req.method),
-    " For: " + chalk.green.bold(req.url),
-    " \n" + chalk.blue.bold("Responding with 400 NOT FOUND")
+    setError(req.method),
+    " For: " + setStatus(req.url),
+    " \n" + setMessage("Responding with 400 NOT FOUND")
   );
   res.status(400).send("Request not found!");
 });

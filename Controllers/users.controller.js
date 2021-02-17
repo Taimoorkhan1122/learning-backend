@@ -7,10 +7,9 @@ exports.getUsersController = async (req, res) => {
   res.status(200).send({ success: true, Message: "getting all users: ", user });
 };
 
-// singup user
+// ====== singup user ======
 exports.userSignUp = async (req, res) => {
   const { username, password } = req.body;
-  console.log(req.body);
 
   if (!username || !password) {
     return res
@@ -27,6 +26,7 @@ exports.userSignUp = async (req, res) => {
         .status(400)
         .send({ success: false, message: "username already exist" });
     }
+
     // encrpting user passowrd using bcrypt
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -47,12 +47,4 @@ exports.userSignUp = async (req, res) => {
   }
 };
 
-// exports.getUsersByID = (req, res) => {
-//   const id = req.params.id;
-//   const foundUser = users.filter((user) => user.id === +id);
-//   console.log(foundUser);
-//   foundUser.length
-//     ? res.send(foundUser)
-//     : res.status(404).send("user not found");
-//   console.dir;
-// };
+exports.userSignIn = (req, res) => {};

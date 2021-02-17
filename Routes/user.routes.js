@@ -12,6 +12,8 @@ router.get("/user", getUsers.getUsersController);
 // ===== POST Routes =====
 router.post("/signup", getUsers.userSignUp);
 
+router.post("/signin", getUsers.userSignUp);
+
 router.post("/", (req, res) => {
   res.status(404).send("request not found again");
 });
