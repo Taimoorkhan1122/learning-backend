@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
-const { ObjectID } = require("bson");
+const JWT = require("jsonwebtoken");
+const { ObjectID } = require("mongoose").Types.ObjectId;
 const chalk = require("chalk");
 
 const { UserModel } = require("../models");
@@ -28,7 +29,7 @@ exports.getByIdController = async (req, res) => {
       .send({ success: false, message: "Please provide a valid user ID" });
   }
   try {
-    const user = await UserModel.findById({ _id: id }, { password: 0 });
+    const user = await UserModel.findById({ _id: id }).select("-password");
     if (!user) {
       return res
         .status(404)
@@ -87,17 +88,33 @@ exports.userSignUp = async (req, res) => {
 // ====== singin user ======
 exports.userSignIn = async (req, res) => {
   const { username, password } = req.body;
+  if (!username || !password) {
+    return res
+      .status(400)
+      .send({ success: false, message: "username and password is required" });
+  }
 
   try {
     const user = await UserModel.findOne({ username });
+    // check if user exist in DB or not
+    if (!user) {
+      // log
+      console.log(
+        `=> got request for: ${req.baseUrl}\n`,
+        setError("user not found\n"),
+        setMessage("responding with 404")
+      );
+      // response
+      return res.status(404).send({
+        sucess: false,
+        message: "user not found, You must signup first",
+      });
+    }
 
     // compare password
     const matched = await bcrypt.compare(password, user.password);
 
-    if (matched) {
-      return res.send({ success: true, messgae: "got sigin request" });
-    } else {
-      // log
+    if (!matched) {
       console.error(
         setError(
           `Error from users.controller.js signin: ${setMessage(
@@ -105,9 +122,23 @@ exports.userSignIn = async (req, res) => {
           )}`
         )
       );
-      // response
-      return res.send({ success: false, messgae: "password not matched" });
+      return res
+        .status(404)
+        .send({ success: false, messgae: "please provide valid credentials" });
     }
+    const payload = {
+      username: user.username,
+      id: user._id,
+    };
+    const token = JWT.sign(payload, "my_special_secret", {
+      expiresIn: "1h",
+    });
+    res.send({
+      success: true,
+      message: " Login sucessful",
+      token,
+      user_id: user._id,
+    });
   } catch (error) {
     console.error(
       setError(
