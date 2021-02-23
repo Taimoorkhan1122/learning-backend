@@ -1,5 +1,5 @@
 const express = require("express");
-const { getTodos } = require("../Controllers");
+const { todosController } = require("../Controllers");
 
 // we are using express router for handling router
 const app = express();
@@ -7,9 +7,9 @@ const app = express();
 const router = express.Router();
 
 // /todos route
-router.get("/", getTodos.todosController);
+router.get("/", todosController.todosController);
 
 // /users/id route
-router.get("/:id", getTodos.getTodosByID);
+router.get("/:id", todosController.getTodosByID);
 
 exports.todoRoute = app.use("/todos", router);

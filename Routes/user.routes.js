@@ -1,5 +1,6 @@
+const { ObjectID } = require("bson");
 const express = require("express");
-const { getUsers } = require("../Controllers");
+const { userControllers } = require("../Controllers");
 const { Auth } = require("../Middlewares");
 // we are using express router for handling router
 const app = express();
@@ -8,15 +9,15 @@ const router = express.Router();
 // =====  GET Route =====
 // router.get("/", getUsers.getUsersController);
 
-router.get("/user", getUsers.getUsersController);
+router.get("/:id", userControllers.getByIdController);
 
 // ===== POST Routes =====
-router.post("/signup", getUsers.userSignUp);
+router.post("/signup", userControllers.userSignUp);
 
-router.post("/signin", Auth, getUsers.userSignIn);
+router.post("/signin", Auth, userControllers.userSignIn);
 
 router.post("/", (req, res) => {
-  res.status(404).send("request not found again");
+  res.status(404).send("request not found");
 });
 
 exports.userRoute = app.use("/users", router);

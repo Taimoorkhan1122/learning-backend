@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const { ObjectID } = require("bson");
 const chalk = require("chalk");
 
 const { UserModel } = require("../models");
@@ -11,6 +12,37 @@ const setStatus = chalk.green.bold;
 exports.getUsersController = async (req, res) => {
   const user = await UserModel.find({}, { password: 0 });
   res.status(200).send({ success: true, Message: "getting all users: ", user });
+};
+
+// ====== get user by ID ======
+exports.getByIdController = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res
+      .status(400)
+      .send({ success: false, message: "Please provide user ID" });
+  }
+  if (!ObjectID.isValid(id)) {
+    return res
+      .status(400)
+      .send({ success: false, message: "Please provide a valid user ID" });
+  }
+  try {
+    const user = await UserModel.findById({ _id: id }, { password: 0 });
+    if (!user) {
+      return res
+        .status(404)
+        .send({ success: false, message: "user not found" });
+    }
+    return res.send({ success: true, user });
+  } catch (error) {
+    console.error(
+      setError(
+        `Error from users.controller.js getByIdController: ${setMessage(error)}`
+      )
+    );
+    res.status(500).send({ message: "internal server error" });
+  }
 };
 
 // ====== singup user ======
@@ -48,6 +80,7 @@ exports.userSignUp = async (req, res) => {
         `Error from users.controller.js signup: ${setMessage(error.message)}`
       )
     );
+    res.status(500).send({ message: "internal server error" });
   }
 };
 
@@ -81,5 +114,6 @@ exports.userSignIn = async (req, res) => {
         `Error from users.controller.js signin: ${setMessage(error.message)}`
       )
     );
+    res.status(500).send({ message: "internal server error" });
   }
 };
