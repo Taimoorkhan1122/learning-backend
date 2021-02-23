@@ -35,6 +35,11 @@ exports.getByIdController = async (req, res) => {
         .status(404)
         .send({ success: false, message: "user not found" });
     }
+    if (user.username !== req.user.username) {
+      return res
+        .status(401)
+        .send({ success: false, message: "Access not allowed" });
+    }
     return res.send({ success: true, user });
   } catch (error) {
     console.error(
@@ -87,6 +92,7 @@ exports.userSignUp = async (req, res) => {
 
 // ====== singin user ======
 exports.userSignIn = async (req, res) => {
+  const SECRET = process.env.secret;
   const { username, password } = req.body;
   if (!username || !password) {
     return res
@@ -130,7 +136,7 @@ exports.userSignIn = async (req, res) => {
       username: user.username,
       id: user._id,
     };
-    const token = JWT.sign(payload, "my_special_secret", {
+    const token = JWT.sign(payload, SECRET, {
       expiresIn: "1h",
     });
     res.send({

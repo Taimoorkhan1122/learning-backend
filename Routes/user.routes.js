@@ -9,12 +9,12 @@ const router = express.Router();
 // =====  GET Route =====
 // router.get("/", getUsers.getUsersController);
 
-router.get("/:id", userControllers.getByIdController);
+router.get("/:id", Auth, userControllers.getByIdController);
 
 // ===== POST Routes =====
 router.post("/signup", userControllers.userSignUp);
 
-router.post("/signin", Auth, userControllers.userSignIn);
+router.post("/signin", userControllers.userSignIn);
 
 router.post("/", (req, res) => {
   res.status(404).send("request not found");
