@@ -5,7 +5,7 @@ const { UserModel } = require("../models");
 
 const app = express();
 
-// ===== Utilities =====
+// ===== Log formatting setting =====
 const setError = chalk.red.bold;
 const setMessage = chalk.blue.bold;
 const setStatus = chalk.green.bold;
@@ -13,22 +13,31 @@ const setStatus = chalk.green.bold;
 // Auth middleware
 module.exports = app.use(async (req, res, next) => {
   const { username, password } = req.body;
+  if (!username || !password) {
+    return res
+      .status(400)
+      .send({ success: false, message: "username and password is required" });
+  }
 
   try {
-    const [user] = await UserModel.find({ username }, { password: 0 });
-    const foundKey = Object.keys(user.toObject());
-    const userKey = ["username"];
-    const isRegistered = userKey.every((key) => foundKey.includes(key));
-    // check if request is from regestered user or not
-    if (!isRegistered) {
+    const [user] = await UserModel.find({ username });
+    // if user is not found in database then return the response with not found
+    // and if user found proceed to the route
+    if (user) {
+      next();
+    } else {
+      // log
       console.log(
-        setError("user not regestered: ") + setMessage("respoding with 404")
+        `=> got request for: ${req.baseUrl}\n`,
+        setError("user not found\n"),
+        setMessage("responding with 404")
       );
-      return res
-        .status(404)
-        .send({ success: false, message: "You must signup first" });
+      // response
+      return res.status(404).send({
+        sucess: false,
+        message: "user not found, You must signup first",
+      });
     }
-    next();
   } catch (error) {
     console.error(setError("error at Auth Middleware ") + error);
   }

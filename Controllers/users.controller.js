@@ -17,12 +17,6 @@ exports.getUsersController = async (req, res) => {
 exports.userSignUp = async (req, res) => {
   const { username, password } = req.body;
 
-  if (!username || !password) {
-    return res
-      .status(400)
-      .send({ success: false, message: "username and password is required" });
-  }
-
   try {
     const user = await UserModel.findOne({ username });
 
@@ -57,21 +51,30 @@ exports.userSignUp = async (req, res) => {
   }
 };
 
-// ====== singup user ======
+// ====== singin user ======
 exports.userSignIn = async (req, res) => {
   const { username, password } = req.body;
 
   try {
     const user = await UserModel.findOne({ username });
-    if (!user) {
-      res
-        .status(404)
-        .send({ success: false, message: "please provide a valid username" });
-    }
 
     // compare password
     const matched = await bcrypt.compare(password, user.password);
-    console.log(matched);
+
+    if (matched) {
+      return res.send({ success: true, messgae: "got sigin request" });
+    } else {
+      // log
+      console.error(
+        setError(
+          `Error from users.controller.js signin: ${setMessage(
+            "password not matched"
+          )}`
+        )
+      );
+      // response
+      return res.send({ success: false, messgae: "password not matched" });
+    }
   } catch (error) {
     console.error(
       setError(
@@ -79,5 +82,4 @@ exports.userSignIn = async (req, res) => {
       )
     );
   }
-  res.send({ success: true, messgae: "got sigin request" });
 };

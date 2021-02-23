@@ -6,7 +6,7 @@ const app = express();
 const router = express.Router();
 
 // =====  GET Route =====
-router.get("/", getUsers.getUsersController);
+// router.get("/", getUsers.getUsersController);
 
 router.get("/user", getUsers.getUsersController);
 
