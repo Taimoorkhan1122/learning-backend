@@ -16,6 +16,9 @@ router.get("/:id", todosController.getTodosByID);
 // create new todo
 router.post("/create", Auth, todosController.createTodo);
 
+// update  todo
+router.put("/update/:id", Auth, todosController.updateTodo);
+
 // delete new todo
 router.delete("/delete/:id", Auth, todosController.deletetodo);
 

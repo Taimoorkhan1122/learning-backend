@@ -8,9 +8,7 @@ exports.getTodos = async (req, res) => {
   try {
     const todos = await TodosModel.find({ createdBy: user.id });
     if (!todos) {
-      return res
-        .status(404)
-        .send({ success: true, message: "no todos found!" });
+      return res.send({ success: true, message: "no todos found!" });
     }
 
     return res.send({ success: true, todos });
@@ -61,6 +59,48 @@ exports.createTodo = async (req, res) => {
   }
 };
 
+// ====== Update todo ======
+exports.updateTodo = async (req, res) => {
+  const _id = req.params.id;
+  const { updatedData } = req.body;
+  const user = req.user;
+
+  if (!ObjectID.isValid(_id)) {
+    return res.status(400).send({ success: false, message: "invalid todo id" });
+  }
+  try {
+    const todo = await TodosModel.findById(_id);
+    if (!todo) {
+      return res.status(404).send({
+        success: false,
+        message: "todo not found",
+      });
+    }
+    await TodosModel.findOneAndUpdate(
+      { _id },
+      updatedData,
+      { new: true },
+      (err, todo) => {
+        if (err) {
+          return res
+            .status(401)
+            .send({ success: false, message: "error updating todo", err });
+        }
+        return res.send({
+          success: true,
+          message: `updated todo: ${todo._id}`,
+          todo,
+        });
+      }
+    );
+  } catch (error) {
+    console.log("error updating todo ", error);
+    res
+      .status(500)
+      .send({ success: false, messgae: "error while updating todo" });
+  }
+};
+
 // ====== Delete todo ======
 // @url: api/v1/todos/delete/id
 exports.deletetodo = async (req, res) => {
@@ -68,27 +108,26 @@ exports.deletetodo = async (req, res) => {
   const user = req.user;
 
   if (!ObjectID.isValid(_id)) {
-    res.status(400).send({ success: false, message: "invalid todo id" });
-  }
-
-  const todo = await TodosModel.findById(_id);
-  console.log(todo);
-  if (!todo) {
-    return res.status(404).send({
-      success: false,
-      message: "todo not found",
-    });
-  }
-  console.log(user.id == todo.createdBy);
-  // validating if user is modifying his own todos
-  if (user.id != todo.createdBy) {
-    return res.status(401).send({
-      success: false,
-      message: "You are not allowed to delete this todo",
-    });
+    return res.status(400).send({ success: false, message: "invalid todo id" });
   }
 
   try {
+    const todo = await TodosModel.findById(_id);
+    if (!todo) {
+      return res.status(404).send({
+        success: false,
+        message: "todo not found",
+      });
+    }
+
+    // validating if user is modifying his own todos
+    if (user.id != todo.createdBy) {
+      return res.status(401).send({
+        success: false,
+        message: "You are not allowed to delete this todo",
+      });
+    }
+
     // The findByIdAndDelete() function is used to find a matching document,
     //removes it, and passing the found document (if any) to the callback.
     await TodosModel.findByIdAndDelete({ _id }, (err, todo) => {
@@ -96,12 +135,10 @@ exports.deletetodo = async (req, res) => {
         console.log(`could not delete ${todo._id}`);
         return res
           .status(400)
-          .send({ success: false, message: `could not delete ${err}` });
+          .send({ success: false, message: "could not delete todo", err });
       }
 
-      return res
-        .status(400)
-        .send({ success: true, message: `deleted  todo: ${todo._id}` });
+      return res.send({ success: true, message: `deleted  todo: ${todo._id}` });
     });
   } catch (error) {
     console.log("error deleting todo ", error);
