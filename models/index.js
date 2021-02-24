@@ -1,2 +1,2 @@
-// module.exports = require("./todo.models");
-module.exports = require("./user.models");
+exports.UserModel = require("./user.models");
+exports.TodosModel = require("./todo.models");
