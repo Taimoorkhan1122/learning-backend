@@ -76,6 +76,15 @@ exports.updateTodo = async (req, res) => {
         message: "todo not found",
       });
     }
+
+    // validating if user is modifying his own todos
+    if (user.id != todo.createdBy) {
+      return res.status(401).send({
+        success: false,
+        message: "You are not allowed to updatae this todo",
+      });
+    }
+
     await TodosModel.findOneAndUpdate(
       { _id },
       updatedData,
