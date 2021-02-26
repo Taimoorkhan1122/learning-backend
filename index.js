@@ -25,17 +25,21 @@ connectDatabase();
 app.use(express.json({ extended: false }));
 
 // ========= Application Routes =========
-app.get("/", (req, res) => {
-  return res.send({
-    success: true,
-    message: `hello from express server \n
-    send post request to ${req.url}/api/v1/users/sigin to sigin or login to signup \n
-    use "/api/v1/todos" to get todos if empty \n
-    use "/api/v1/todos/create" to create \n
-    use "/api/v1/todos/update" to update \n
-    user "/api/v1/todos/delete" to delete todos`,
-  });
-});
+app.use("/", express.static("public"));
+// app.get("/", (req, res) => {
+//   return (
+//     express.static("public"),
+//     res.send({
+//       success: true,
+//       message: `hello from express server \n
+//     send post request to ${req.url}/api/v1/users/sigin to sigin or login to signup \n
+//     use "/api/v1/todos" to get todos if empty \n
+//     use "/api/v1/todos/create" to create \n
+//     use "/api/v1/todos/update" to update \n
+//     user "/api/v1/todos/delete" to delete todos`,
+//     })
+//   );
+// });
 
 app.use("/api/v1", router);
 

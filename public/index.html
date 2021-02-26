@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node Express Server</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        max-height: 100vh;
+      }
+      .container {
+        width: 70%;
+        background: #ebebeb;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        margin: auto;
+        padding: 2rem;
+        border-radius: 1rem;
+        font-weight: 300;
+        font-size: 16px;
+      }
+      .details {
+        font-size: 14px;
+        font-family: monospace;
+      }
+      .details ul {
+        list-style-type: none;
+        margin: auto;
+      }
+      li {
+        margin: 10px;
+        padding: 10px;
+        background: #302f2f;
+        color: #2eff4a;
+        border-radius: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Hello from express server 🤗</h1>
+      <div class="details">
+        <ul>
+          <div class="list-container">
+            <li>
+              send post request to ${req.url}/api/v1/users/sigin to sigin or
+              /login to signup
+            </li>
+          </div>
+
+          <li>use "/api/v1/todos" to get todos</li>
+          <li>if empty use "/api/v1/todos/create" to create</li>
+          <li>use "/api/v1/todos/update" to update user</li>
+          <li>"/api/v1/todos/delete" to delete todos</li>
+        </ul>
+        Created By: Taimoor khan <br />
+        Hosted on: Heroku
+      </div>
+    </div>
+  </body>
+</html>
