@@ -16,7 +16,7 @@ module.exports = app.use(async (req, res, next) => {
   console.log("auth triggered");
   const token = req.header("x-auth-token");
 
-  const SECRET = process.env.secret;
+  const SECRET = process.env.SECRET;
 
   if (!token) {
     console.log(
