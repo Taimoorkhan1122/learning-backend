@@ -1,3 +1,4 @@
 /node_modules
 /request.http
 /.env
+npm-debug.log
