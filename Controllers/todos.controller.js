@@ -149,6 +149,12 @@ exports.deletetodo = async (req, res) => {
           .status(400)
           .send({ success: false, message: "could not delete todo", err });
       }
+      if (!todo) {
+        console.log("no todos found ", todo);
+        return res
+          .status(401)
+          .send({ success: false, message: "todo not found!" });
+      }
 
       return res.send({ success: true, message: `deleted  todo: ${todo._id}` });
     });
