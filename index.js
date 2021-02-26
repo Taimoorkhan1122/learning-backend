@@ -25,6 +25,9 @@ connectDatabase();
 app.use(express.json({ extended: false }));
 
 // ========= Application Routes =========
+app.get("/", (req, res) => {
+  return res.send({ success: true, message: "hello from express server" });
+});
 
 app.use("/api/v1", router);
 
