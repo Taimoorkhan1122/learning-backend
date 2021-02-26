@@ -3,6 +3,7 @@ const { ObjectID } = require("mongoose").Types.ObjectId;
 const { TodosModel } = require("../models");
 
 // ====== get all todos of user ======
+// @url: api/v1/todos/
 exports.getTodos = async (req, res) => {
   const user = req.user;
   try {
@@ -30,6 +31,7 @@ exports.getTodosByID = (req, res) => {
 };
 
 // ====== Creat new todo ======
+// @url: api/v1/todos/create
 exports.createTodo = async (req, res) => {
   const user = req.user;
   const { todo } = req.body;
@@ -60,6 +62,7 @@ exports.createTodo = async (req, res) => {
 };
 
 // ====== Update todo ======
+// @url: api/v1/todos/update/id
 exports.updateTodo = async (req, res) => {
   const _id = req.params.id;
   const { updatedData } = req.body;

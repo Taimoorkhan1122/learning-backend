@@ -10,6 +10,8 @@ const setError = chalk.red.bold;
 const setMessage = chalk.blue.bold;
 const setStatus = chalk.green.bold;
 
+// ====== getting user ======
+// @url: api/v1/users
 exports.getUsersController = async (req, res) => {
   const user = await UserModel.find({}, { password: 0 });
   res.status(200).send({ success: true, Message: "getting all users: ", user });
