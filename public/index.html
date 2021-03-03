@@ -25,7 +25,29 @@
         font-weight: 300;
         font-size: 1rem;
       }
+      .navbar {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+      }
+      .navbar ul {
+        display: flex;
+        list-style-type: none;
+      }
+      .navbar ul li {
+        background-color: #302f2f;
+        color: #ebebeb;
+        border-radius: 0.5rem;
+      }
+      .navbar a {
+        text-decoration: none;
+        color: #ebebeb;
+      }
+      .navbar a:active {
+        color: #2eff4a;
+      }
       .details {
+        margin: auto;
         font-size: 0.75rem;
         font-family: monospace;
       }
@@ -44,6 +66,12 @@
   </head>
   <body>
     <div class="container">
+      <nav class="navbar">
+        <ul>
+          <li><a href="./login.html">login</a></li>
+          <li><a href="./login.html">signup</a></li>
+        </ul>
+      </nav>
       <h1>Hello from express server 🤗</h1>
       <div class="details">
         <ul>
