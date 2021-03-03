@@ -96,6 +96,7 @@ exports.userSignUp = async (req, res) => {
 exports.userSignIn = async (req, res) => {
   const SECRET = process.env.SECRET;
   const { username, password } = req.body;
+  console.log(username, password);
   if (!username || !password) {
     return res
       .status(400)

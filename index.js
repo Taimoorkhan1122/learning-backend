@@ -3,7 +3,7 @@ const express = require("express");
 const { ConnectionBase } = require("mongoose");
 const chalk = require("chalk");
 require("dotenv").config({ path: "./.env" });
-
+const bodyParser = require("body-parser");
 // importing internal modules
 
 const router = require("./Routes");
@@ -22,7 +22,8 @@ console.clear();
 connectDatabase();
 
 // when  we get data, it will be parsed into json rather than ugly raw data
-app.use(express.json({ extended: false }));
+// app.use(express.json({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // ========= Application Routes =========
 app.use("/", express.static("public"));

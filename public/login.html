@@ -74,15 +74,15 @@
   <body>
     <div class="container">
       <h2 style="margin-top: 1.4rem">Hi, there Welcome back</h2>
-      <form action="post:">
+      <form action="/api/v1/users/signin" method="POST">
         <!-- <label for="name"> <input type="name" />Enter your name </label> -->
         <div class="fields">
           <label for="username"> Enter username </label
-          ><input id="username" type="text" />
+          ><input id="username" name="username" type="text" />
         </div>
         <div class="fields">
           <label for="password"> Enter Password </label
-          ><input id="password" type="password" />
+          ><input id="password" name="password" type="password" />
         </div>
         <button type="submit">Login</button>
       </form>
